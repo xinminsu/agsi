@@ -4,7 +4,7 @@ This is the README for your extension "agsi". After writing up a brief descripti
 
 ## Features
 
-a Visual Studio Code extension that automates the installation of the Agoric SDK. This extension should install all dependencies as well as upgrade previously installed versions.
+a Visual Studio Code extension that automates the installation of the Agoric SDK[https://agoric.com/documentation/getting-started/before-using-agoric.html#quick-start]. This extension should install all dependencies as well as upgrade previously installed versions.
 
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
