@@ -18,10 +18,6 @@ interface Process {
 }
 
 
-interface CommandArgument {
-	fsPath: string;
-}
-
 let terminal: Terminal | null = null;
 let lastScript: Script | null = null;
 
@@ -72,7 +68,7 @@ function registerCommands(context: ExtensionContext) {
 	);
 }
 
-function runAgsiInstall(arg: CommandArgument) {
+function runAgsiInstall() {
 	let home = process.env.HOME;
 	if (typeof home === "undefined") {
        home = '';
