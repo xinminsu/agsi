@@ -4,6 +4,12 @@
 	"description": "agoric sdk install",
 	"version": "0.0.1",
 	"publisher": "xinminsu",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": " https://github.com/xinminsu/agsi"
+	},
 	"engines": {
 		"vscode": "^1.66.0"
 	},
@@ -11,11 +17,21 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onCommand:agsi.ls",
+		"onCommand:agsi.install",
         "onCommand:agsi.helloWorld"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
+			{
+				"command": "agsi.ls",
+				"title": "similar to ls command in Xnix"
+			},
+			{
+				"command": "agsi.install",
+				"title": "agoric sdk install"
+			},
 			{
 				"command": "agsi.helloWorld",
 				"title": "Hello World"
