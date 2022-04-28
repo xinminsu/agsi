@@ -25,16 +25,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "agsi.ls",
-				"title": "similar to ls command in Xnix"
-			},
-			{
 				"command": "agsi.install",
 				"title": "agoric sdk install"
-			},
-			{
-				"command": "agsi.helloWorld",
-				"title": "Hello World"
 			}
 		],
 		"configuration": {

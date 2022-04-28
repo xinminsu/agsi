@@ -29,6 +29,21 @@ const runningProcesses: Map<number, Process> = new Map();
 
 let outputChannel: OutputChannel;
 
+let curDir: string;
+
+let installSteps:string[];
+installSteps = [
+	"git --version",
+	"node --version",
+    "npm install --global yarn",
+    "git clone https://github.com/Agoric/agoric-sdk",
+    "cd agoric-sdk",
+    "yarn install",
+    "yarn build",
+    "yarn link-cli ~/bin/agoric",
+    "agoric --version"
+];
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
@@ -53,21 +68,8 @@ export function deactivate() {}
 
 function registerCommands(context: ExtensionContext) {
 	context.subscriptions.push(
-		commands.registerCommand('agsi.ls', runAgsiLs),
-		commands.registerCommand('agsi.install', runAgsiInstall),
-		commands.registerCommand('agsi.helloWorld', () => {
-			window.showInformationMessage('Hello World from agsi!');
-		})
+		commands.registerCommand('agsi.install', runAgsiInstall)
 	);
-}
-
-function runAgsiLs(arg: CommandArgument) {
-	let home = process.env.HOME;
-	if (typeof home === "undefined") {
-       home = '';
-	}
-
-	runAgsiCommand('ls',  home);
 }
 
 function runAgsiInstall(arg: CommandArgument) {
@@ -75,7 +77,13 @@ function runAgsiInstall(arg: CommandArgument) {
 	if (typeof home === "undefined") {
        home = '';
 	}
-	runAgsiCommand('install', home);
+	curDir = home;
+
+	goHome();
+
+	for (let index in installSteps) {
+		runAgsiCommand(installSteps[index], curDir);
+	}
 }
 
 
@@ -92,12 +100,15 @@ function runCommand(args: string, cwd: string | undefined): void {
 
 function runAgsiCommand(command: string,  dir: string) {
 
-	const scriptList: Script[] = [];
+	if(command.includes('cd')){
+		curDir = dir + '/' + command.split(" ",2)[1];
+	} else {
+		curDir = dir;
+	}
 
-	scriptList.push({
-
+	var script: Script = { 
 		scriptName: command,
-		cwd: dir,
+		cwd: curDir, 
 		execute(this: Script) {
 			let script = this.scriptName;
 			// quote the script name, when it contains white space
@@ -107,13 +118,9 @@ function runAgsiCommand(command: string,  dir: string) {
 
 			runCommand(command, this.cwd);
 		}
-	});
-	
+	};
 
-	if (scriptList.length === 1) {
-		scriptList[0].execute();
-		return;
-	} 
+	script.execute();
 }
 
 
@@ -149,17 +156,28 @@ function showAgsiOutput(): void {
 	outputChannel.show(ViewColumn.Three);
 }
 
+function goHome(): void {
+
+	let home = process.env.HOME;
+	if (typeof home === "undefined") {
+       home = '';
+	}
+
+	if (!terminal) {
+		terminal = window.createTerminal('agsi');
+	}
+	terminal.show();
+
+	terminal.sendText('cd ' + home);
+}
+
 function runCommandInIntegratedTerminal(args: string, cwd: string | undefined): void {
 
 	if (!terminal) {
 		terminal = window.createTerminal('agsi');
 	}
 	terminal.show();
-	if (cwd) {
-		// Replace single backslash with double backslash.
-		const textCwd = cwd.replace(/\\/g, '\\\\');
-		terminal.sendText(['cd', `"${textCwd}"`].join(' '));
-	}
+
 	terminal.sendText(args);
 }
 
