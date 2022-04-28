@@ -36,7 +36,18 @@
 				"command": "agsi.helloWorld",
 				"title": "Hello World"
 			}
-		]
+		],
+		"configuration": {
+			"type": "object",
+			"title": "agsi Script Runner",
+			"properties": {
+				"agsi.runInTerminal": {
+					"type": "boolean",
+					"default": true,
+					"description": "Run agsi commands in a terminal, otherwise shows the output in the output panel"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -58,5 +69,8 @@
 		"mocha": "^9.2.2",
 		"typescript": "^4.5.5",
 		"@vscode/test-electron": "^2.1.3"
+	},
+	"dependencies": {
+		"run-in-terminal":"^0.0.3"
 	}
 }
