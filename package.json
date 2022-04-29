@@ -17,9 +17,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:agsi.ls",
-		"onCommand:agsi.install",
-        "onCommand:agsi.helloWorld"
+		"onCommand:agsi.install"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

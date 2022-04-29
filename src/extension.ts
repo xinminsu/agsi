@@ -6,20 +6,12 @@ import {
 	window, commands, workspace,  OutputChannel, ExtensionContext, ViewColumn, Terminal
 } from 'vscode';
 
-interface Script {
-	scriptName: string;
-	cwd: string | undefined;
-	execute(): void;
-}
-
 interface Process {
 	process: cp.ChildProcess;
 	cmd: string;
 }
 
-
 let terminal: Terminal | null = null;
-let lastScript: Script | null = null;
 
 const runningProcesses: Map<number, Process> = new Map();
 
@@ -102,21 +94,7 @@ function runAgsiCommand(command: string,  dir: string) {
 		curDir = dir;
 	}
 
-	var script: Script = { 
-		scriptName: command,
-		cwd: curDir, 
-		execute(this: Script) {
-			let script = this.scriptName;
-			// quote the script name, when it contains white space
-			if (/\s/g.test(script)) {
-				script = `"${script}"`;
-			}
-
-			runCommand(command, this.cwd);
-		}
-	};
-
-	script.execute();
+	runCommand(command, curDir);
 }
 
 
